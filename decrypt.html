@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Decrypt</title>
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(135deg,#232526,#414345);
+color:white;
+text-align:center;
+}
+nav{
+background:rgba(0,0,0,0.6);
+padding:15px;
+}
+nav a{
+color:white;
+margin:15px;
+text-decoration:none;
+font-weight:bold;
+}
+img{
+width:100px;
+margin-top:20px;
+}
+textarea{
+width:60%;
+height:100px;
+border-radius:10px;
+border:none;
+padding:10px;
+margin-bottom:10px;
+}
+input{
+width:60%;
+padding:10px;
+border-radius:10px;
+border:none;
+margin-bottom:10px;
+}
+button{
+padding:10px 20px;
+border:none;
+border-radius:10px;
+margin:5px;
+cursor:pointer;
+font-weight:bold;
+}
+.decryptBtn{background:#ff4e50;}
+.copyBtn{background:#4CAF50;}
+.downloadBtn{background:#ff9800;}
+button:hover{transform:scale(1.05);}
+#result{
+margin-top:15px;
+background:rgba(0,0,0,0.3);
+padding:10px;
+border-radius:10px;
+}
+</style>
+</head>
+<body>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="encrypt.html">Encrypt</a>
+<a href="decrypt.html">Decrypt</a>
+<a href="about.html">About</a>
+</nav>
+
+<img src="https://static.vecteezy.com/system/resources/thumbnails/051/585/971/small_2x/unlocking-animation-on-a-transparent-background-lock-unlock-video.jpg">
+<h2>Decrypt Message</h2>
+
+<textarea id="cipher" placeholder="Enter encrypted text"></textarea><br>
+<input type="password" id="key" placeholder="Enter Secret Key"><br>
+
+<button class="decryptBtn" onclick="decrypt()">Decrypt</button>
+<button class="copyBtn" onclick="copyText()">Copy</button>
+<button class="downloadBtn" onclick="download()">Download</button>
+
+<div id="result"></div>
+
+<script>
+function decrypt(){
+let text=document.getElementById("cipher").value;
+let key=document.getElementById("key").value;
+
+if(text==="" || key===""){
+alert("Enter encrypted text and key!");
+return;
+}
+
+try{
+let decoded=atob(text);
+let parts=decoded.split("|");
+
+if(parts[0]===key){
+document.getElementById("result").innerText=parts[1];
+}else{
+document.getElementById("result").innerText="❌ Wrong Secret Key!";
+}
+}catch{
+document.getElementById("result").innerText="Invalid Encrypted Text!";
+}
+}
+
+function copyText(){
+let text=document.getElementById("result").innerText;
+navigator.clipboard.writeText(text);
+alert("Copied!");
+}
+
+function download(){
+let text=document.getElementById("result").innerText;
+let blob=new Blob([text],{type:"text/plain"});
+let a=document.createElement("a");
+a.href=URL.createObjectURL(blob);
+a.download="decrypted.txt";
+a.click();
+}
+</script>
+
+</body>
+</html>

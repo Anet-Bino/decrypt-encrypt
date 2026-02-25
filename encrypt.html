@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Encrypt</title>
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+color:white;
+text-align:center;
+}
+nav{
+background:rgba(0,0,0,0.6);
+padding:15px;
+}
+nav a{
+color:white;
+margin:15px;
+text-decoration:none;
+font-weight:bold;
+}
+.container{
+margin-top:30px;
+}
+img{
+width:100px;
+margin-bottom:15px;
+}
+textarea{
+width:60%;
+height:100px;
+border-radius:10px;
+border:none;
+padding:10px;
+margin-bottom:10px;
+}
+input{
+width:60%;
+padding:10px;
+border-radius:10px;
+border:none;
+margin-bottom:10px;
+}
+button{
+padding:10px 20px;
+border:none;
+border-radius:10px;
+margin:5px;
+cursor:pointer;
+font-weight:bold;
+}
+.encryptBtn{background:#00f2fe;}
+.copyBtn{background:#4CAF50;}
+.downloadBtn{background:#ff9800;}
+button:hover{transform:scale(1.05);}
+#result{
+margin-top:15px;
+word-wrap:break-word;
+background:rgba(0,0,0,0.3);
+padding:10px;
+border-radius:10px;
+}
+</style>
+</head>
+<body>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="encrypt.html">Encrypt</a>
+<a href="decrypt.html">Decrypt</a>
+<a href="about.html">About</a>
+</nav>
+
+<div class="container">
+<img src="https://cdn-icons-png.flaticon.com/512/3064/3064155.png">
+<h2>Encrypt Your Message</h2>
+
+<textarea id="text" placeholder="Enter text here"></textarea><br>
+<input type="password" id="key" placeholder="Enter Secret Key"><br>
+<input type="file" id="fileInput"><br>
+
+<button class="encryptBtn" onclick="encrypt()">Encrypt</button>
+<button class="copyBtn" onclick="copyText()">Copy</button>
+<button class="downloadBtn" onclick="download()">Download</button>
+
+<div id="result"></div>
+</div>
+
+<script>
+function encrypt(){
+let text=document.getElementById("text").value;
+let key=document.getElementById("key").value;
+
+if(text==="" || key===""){
+alert("Enter text and secret key!");
+return;
+}
+
+let combined=key+"|"+text;
+let encrypted=btoa(combined);
+
+document.getElementById("result").innerText=encrypted;
+localStorage.setItem("encrypted",encrypted);
+}
+
+function copyText(){
+let text=document.getElementById("result").innerText;
+navigator.clipboard.writeText(text);
+alert("Copied!");
+}
+
+function download(){
+let text=document.getElementById("result").innerText;
+let blob=new Blob([text],{type:"text/plain"});
+let a=document.createElement("a");
+a.href=URL.createObjectURL(blob);
+a.download="encrypted.txt";
+a.click();
+}
+
+document.getElementById("fileInput").addEventListener("change",function(e){
+let reader=new FileReader();
+reader.onload=function(){
+document.getElementById("text").value=reader.result;
+}
+reader.readAsText(e.target.files[0]);
+});
+</script>
+
+</body>
+</html>
